@@ -1,0 +1,2599 @@
+[
+    {
+        "id": "522dde706ec49ac4",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "03a139de35aa031b",
+        "type": "mqtt-broker",
+        "name": "plantalytix-mosquitto",
+        "broker": "plantalytix-mosquitto",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "209768b9594d9caa",
+        "type": "global-config",
+        "name": "global-config",
+        "env": [
+            {
+                "name": "FAN_EXTERNAL_SETPOINT",
+                "value": "1",
+                "type": "num"
+            },
+            {
+                "name": "TEMPERATURE_SETPOINT",
+                "value": "19",
+                "type": "num"
+            },
+            {
+                "name": "LIGHT_RANGETEMPERATURE_LOW",
+                "value": "20",
+                "type": "num"
+            },
+            {
+                "name": "LIGHT_RANGETEMPERATURE_HIGH",
+                "value": "21",
+                "type": "num"
+            },
+            {
+                "name": "LIGHT_SETPOINT",
+                "value": "0.5",
+                "type": "num"
+            },
+            {
+                "name": "HUMIDITY_SETPOINT",
+                "value": "50",
+                "type": "num"
+            },
+            {
+                "name": "HUMIDITY_THRESHOLD_LOW",
+                "value": "45",
+                "type": "num"
+            },
+            {
+                "name": "HUMIDITY_THRESHOLD_HIGH",
+                "value": "55",
+                "type": "num"
+            },
+            {
+                "name": "CO2_SETPOINT",
+                "value": "6000",
+                "type": "num"
+            },
+            {
+                "name": "CO2_INJECT_DELAY",
+                "value": "120000",
+                "type": "num"
+            },
+            {
+                "name": "CO2_INJECT_DURATION",
+                "value": "500",
+                "type": "num"
+            },
+            {
+                "name": "LIGHT_SUNRISE",
+                "value": "08:00",
+                "type": "str"
+            },
+            {
+                "name": "LIGHT_SUNSET",
+                "value": "22:00",
+                "type": "str"
+            }
+        ]
+    },
+    {
+        "id": "2bddf874c90bdecd",
+        "type": "mqtt-broker",
+        "name": "plantalytix-mosquitto_fallback",
+        "broker": "plantalytix-mosquitto",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "bfe812c1e1a633a9",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": 8086,
+        "protocol": "http",
+        "database": "database",
+        "name": "plantalytix-influxdb",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "2.0",
+        "url": "http://plantalytix-influxdb:8086",
+        "timeout": 10,
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "1c1a5edef41716e3",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "my_data",
+        "name": "",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "2.0",
+        "url": "https://localhost",
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "8f9380a00a08589c",
+        "type": "mqtt in",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/status/sensors/temperature",
+        "topic": "/devices/plantalytix/status/sensors/temperature",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "03a139de35aa031b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 220,
+        "y": 660,
+        "wires": [
+            [
+                "247a028854fbfd81"
+            ]
+        ]
+    },
+    {
+        "id": "247a028854fbfd81",
+        "type": "change",
+        "z": "522dde706ec49ac4",
+        "name": "set fields and tags for influxdb",
+        "rules": [
+            {
+                "t": "set",
+                "p": "fields.time",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            },
+            {
+                "t": "set",
+                "p": "fields.temperature",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "tags.unit",
+                "pt": "msg",
+                "to": "°C",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$append(fields,tags)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 570,
+        "y": 660,
+        "wires": [
+            [
+                "b7a04b0e6edceade"
+            ]
+        ]
+    },
+    {
+        "id": "e574508585a60588",
+        "type": "debug",
+        "z": "522dde706ec49ac4",
+        "name": "influxdb-sensors-temperature",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1160,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "b7a04b0e6edceade",
+        "type": "function",
+        "z": "522dde706ec49ac4",
+        "name": "change timestamp from ms to s",
+        "func": "msg.fields.time = Math.floor(msg.fields.time/1000);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 660,
+        "wires": [
+            [
+                "e574508585a60588",
+                "3f4e959e8754022f"
+            ]
+        ]
+    },
+    {
+        "id": "893a01ac4c9905cd",
+        "type": "mqtt in",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/status/sensors/humidity",
+        "topic": "/devices/plantalytix/status/sensors/humidity",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "03a139de35aa031b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 200,
+        "y": 760,
+        "wires": [
+            [
+                "49145347ae70a35b"
+            ]
+        ]
+    },
+    {
+        "id": "49145347ae70a35b",
+        "type": "change",
+        "z": "522dde706ec49ac4",
+        "name": "set fields and tags for influxdb",
+        "rules": [
+            {
+                "t": "set",
+                "p": "fields.time",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            },
+            {
+                "t": "set",
+                "p": "fields.rf",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "tags.unit",
+                "pt": "msg",
+                "to": "%",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$append(fields,tags)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 570,
+        "y": 760,
+        "wires": [
+            [
+                "d5f216219df79f1e"
+            ]
+        ]
+    },
+    {
+        "id": "36cc2f1629f22163",
+        "type": "debug",
+        "z": "522dde706ec49ac4",
+        "name": "influxdb-sensors-humidity",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1150,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "d5f216219df79f1e",
+        "type": "function",
+        "z": "522dde706ec49ac4",
+        "name": "change timestamp from ms to s",
+        "func": "msg.fields.time = Math.floor(msg.fields.time/1000);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 760,
+        "wires": [
+            [
+                "36cc2f1629f22163",
+                "89652473561f3926"
+            ]
+        ]
+    },
+    {
+        "id": "d21f41e9752e85bb",
+        "type": "mqtt in",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/status/sensors/co2",
+        "topic": "/devices/plantalytix/status/sensors/co2",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "03a139de35aa031b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 190,
+        "y": 880,
+        "wires": [
+            [
+                "8967192b43b525c0"
+            ]
+        ]
+    },
+    {
+        "id": "8967192b43b525c0",
+        "type": "change",
+        "z": "522dde706ec49ac4",
+        "name": "set fields and tags for influxdb",
+        "rules": [
+            {
+                "t": "set",
+                "p": "fields.time",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            },
+            {
+                "t": "set",
+                "p": "fields.co2",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "tags.unit",
+                "pt": "msg",
+                "to": "ppm",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$append(fields,tags)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 570,
+        "y": 880,
+        "wires": [
+            [
+                "24a0f3ab4addf839"
+            ]
+        ]
+    },
+    {
+        "id": "6b002c18c5126438",
+        "type": "debug",
+        "z": "522dde706ec49ac4",
+        "name": "influxdb-sensors-co2",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1140,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "24a0f3ab4addf839",
+        "type": "function",
+        "z": "522dde706ec49ac4",
+        "name": "change timestamp from ms to s",
+        "func": "msg.fields.time = Math.floor(msg.fields.time/1000);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 880,
+        "wires": [
+            [
+                "6b002c18c5126438",
+                "3e815b8897d5cba9"
+            ]
+        ]
+    },
+    {
+        "id": "dbdaf640789c0e49",
+        "type": "mqtt in",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/status/outputs/co2",
+        "topic": "/devices/plantalytix/status/outputs/co2",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "03a139de35aa031b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 190,
+        "y": 1080,
+        "wires": [
+            [
+                "3a8c8298e127a9ca"
+            ]
+        ]
+    },
+    {
+        "id": "3a8c8298e127a9ca",
+        "type": "change",
+        "z": "522dde706ec49ac4",
+        "name": "set fields and tags for influxdb",
+        "rules": [
+            {
+                "t": "set",
+                "p": "fields.time",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            },
+            {
+                "t": "set",
+                "p": "fields.co2",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$append(fields,tags)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 570,
+        "y": 1080,
+        "wires": [
+            [
+                "7c44d6aa13de2064"
+            ]
+        ]
+    },
+    {
+        "id": "efe605b16391e25b",
+        "type": "debug",
+        "z": "522dde706ec49ac4",
+        "name": "influxdb-outputs-co2",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1140,
+        "y": 1120,
+        "wires": []
+    },
+    {
+        "id": "7c44d6aa13de2064",
+        "type": "function",
+        "z": "522dde706ec49ac4",
+        "name": "change timestamp from ms to s",
+        "func": "msg.fields.time = Math.floor(msg.fields.time/1000);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 1080,
+        "wires": [
+            [
+                "efe605b16391e25b",
+                "6d0fa635933ad84a"
+            ]
+        ]
+    },
+    {
+        "id": "959881d68e8d2ac4",
+        "type": "mqtt in",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/status/outputs/dehumidifier",
+        "topic": "/devices/plantalytix/status/outputs/dehumidifier",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "03a139de35aa031b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 210,
+        "y": 1180,
+        "wires": [
+            [
+                "8b8b98565ff40d39"
+            ]
+        ]
+    },
+    {
+        "id": "8b8b98565ff40d39",
+        "type": "change",
+        "z": "522dde706ec49ac4",
+        "name": "set fields and tags for influxdb",
+        "rules": [
+            {
+                "t": "set",
+                "p": "fields.time",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            },
+            {
+                "t": "set",
+                "p": "fields.dehumidifier",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$append(fields,tags)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 570,
+        "y": 1180,
+        "wires": [
+            [
+                "977be5d261a542b0"
+            ]
+        ]
+    },
+    {
+        "id": "8aef3915c84e780a",
+        "type": "debug",
+        "z": "522dde706ec49ac4",
+        "name": "influxdb-outputs-dehumidifier",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1160,
+        "y": 1220,
+        "wires": []
+    },
+    {
+        "id": "977be5d261a542b0",
+        "type": "function",
+        "z": "522dde706ec49ac4",
+        "name": "change timestamp from ms to s",
+        "func": "msg.fields.time = Math.floor(msg.fields.time/1000);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 1180,
+        "wires": [
+            [
+                "8aef3915c84e780a",
+                "4325c7a2907f29c5"
+            ]
+        ]
+    },
+    {
+        "id": "f45a7d1f4fca5050",
+        "type": "mqtt in",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/status/outputs/heater",
+        "topic": "/devices/plantalytix/status/outputs/heater",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "03a139de35aa031b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 200,
+        "y": 1280,
+        "wires": [
+            [
+                "c23f501c8b636c02"
+            ]
+        ]
+    },
+    {
+        "id": "c23f501c8b636c02",
+        "type": "change",
+        "z": "522dde706ec49ac4",
+        "name": "set fields and tags for influxdb",
+        "rules": [
+            {
+                "t": "set",
+                "p": "fields.time",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            },
+            {
+                "t": "set",
+                "p": "fields.heater",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$append(fields,tags)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 570,
+        "y": 1280,
+        "wires": [
+            [
+                "fba31b78b85f6da9"
+            ]
+        ]
+    },
+    {
+        "id": "e8ad60876f464ec2",
+        "type": "debug",
+        "z": "522dde706ec49ac4",
+        "name": "influxdb-outputs-heater",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1140,
+        "y": 1320,
+        "wires": []
+    },
+    {
+        "id": "fba31b78b85f6da9",
+        "type": "function",
+        "z": "522dde706ec49ac4",
+        "name": "change timestamp from ms to s",
+        "func": "msg.fields.time = Math.floor(msg.fields.time/1000);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 1280,
+        "wires": [
+            [
+                "e8ad60876f464ec2",
+                "047440e8975c082a"
+            ]
+        ]
+    },
+    {
+        "id": "d6c2f6480756cdc7",
+        "type": "mqtt in",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/status/outputs/light",
+        "topic": "/devices/plantalytix/status/outputs/light",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "03a139de35aa031b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 190,
+        "y": 1380,
+        "wires": [
+            [
+                "73407586e66697b9"
+            ]
+        ]
+    },
+    {
+        "id": "73407586e66697b9",
+        "type": "change",
+        "z": "522dde706ec49ac4",
+        "name": "set fields and tags for influxdb",
+        "rules": [
+            {
+                "t": "set",
+                "p": "fields.time",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            },
+            {
+                "t": "set",
+                "p": "fields.light",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$append(fields,tags)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 570,
+        "y": 1380,
+        "wires": [
+            [
+                "6679e7d3059495db"
+            ]
+        ]
+    },
+    {
+        "id": "30de68d223f42fec",
+        "type": "debug",
+        "z": "522dde706ec49ac4",
+        "name": "influxdb-outputs-light",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1140,
+        "y": 1420,
+        "wires": []
+    },
+    {
+        "id": "6679e7d3059495db",
+        "type": "function",
+        "z": "522dde706ec49ac4",
+        "name": "change timestamp from ms to s",
+        "func": "msg.fields.time = Math.floor(msg.fields.time/1000);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 1380,
+        "wires": [
+            [
+                "30de68d223f42fec",
+                "a72fc3c4c04b3975"
+            ]
+        ]
+    },
+    {
+        "id": "4f86c3fb7dab5693",
+        "type": "mqtt in",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/status/outputs/fan-internal",
+        "topic": "/devices/plantalytix/status/outputs/fan-internal",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "03a139de35aa031b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 210,
+        "y": 1480,
+        "wires": [
+            [
+                "3b4a9685e3e25b66"
+            ]
+        ]
+    },
+    {
+        "id": "3b4a9685e3e25b66",
+        "type": "change",
+        "z": "522dde706ec49ac4",
+        "name": "set fields and tags for influxdb",
+        "rules": [
+            {
+                "t": "set",
+                "p": "fields.time",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            },
+            {
+                "t": "set",
+                "p": "fields.fan-internal",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$append(fields,tags)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 570,
+        "y": 1480,
+        "wires": [
+            [
+                "613ec651f771efea"
+            ]
+        ]
+    },
+    {
+        "id": "864b642bc776816e",
+        "type": "debug",
+        "z": "522dde706ec49ac4",
+        "name": "influxdb-outputs-fan-internal",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1160,
+        "y": 1520,
+        "wires": []
+    },
+    {
+        "id": "613ec651f771efea",
+        "type": "function",
+        "z": "522dde706ec49ac4",
+        "name": "change timestamp from ms to s",
+        "func": "msg.fields.time = Math.floor(msg.fields.time/1000);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 1480,
+        "wires": [
+            [
+                "864b642bc776816e",
+                "51dee6d7d63f476b"
+            ]
+        ]
+    },
+    {
+        "id": "805778aeaa2c1c68",
+        "type": "mqtt in",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/status/outputs/fan-external",
+        "topic": "/devices/plantalytix/status/outputs/fan-external",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "03a139de35aa031b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 210,
+        "y": 1580,
+        "wires": [
+            [
+                "3fdd39fc6795dbef"
+            ]
+        ]
+    },
+    {
+        "id": "3fdd39fc6795dbef",
+        "type": "change",
+        "z": "522dde706ec49ac4",
+        "name": "set fields and tags for influxdb",
+        "rules": [
+            {
+                "t": "set",
+                "p": "fields.time",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            },
+            {
+                "t": "set",
+                "p": "fields.fan-external",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$append(fields,tags)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 570,
+        "y": 1580,
+        "wires": [
+            [
+                "ab812d73d8c8a1be"
+            ]
+        ]
+    },
+    {
+        "id": "d6684d7be0db0575",
+        "type": "debug",
+        "z": "522dde706ec49ac4",
+        "name": "influxdb-outputs-fan-external",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1160,
+        "y": 1620,
+        "wires": []
+    },
+    {
+        "id": "ab812d73d8c8a1be",
+        "type": "function",
+        "z": "522dde706ec49ac4",
+        "name": "change timestamp from ms to s",
+        "func": "msg.fields.time = Math.floor(msg.fields.time/1000);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 1580,
+        "wires": [
+            [
+                "d6684d7be0db0575",
+                "5ccef4b430587ef9"
+            ]
+        ]
+    },
+    {
+        "id": "64fb87dd11983fb5",
+        "type": "mqtt in",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/status/outputs/fan-backwall",
+        "topic": "/devices/plantalytix/status/outputs/fan-backwall",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "03a139de35aa031b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 210,
+        "y": 1680,
+        "wires": [
+            [
+                "19445f9d4a7020f7"
+            ]
+        ]
+    },
+    {
+        "id": "19445f9d4a7020f7",
+        "type": "change",
+        "z": "522dde706ec49ac4",
+        "name": "set fields and tags for influxdb",
+        "rules": [
+            {
+                "t": "set",
+                "p": "fields.time",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            },
+            {
+                "t": "set",
+                "p": "fields.fan-backwall",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$append(fields,tags)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 570,
+        "y": 1680,
+        "wires": [
+            [
+                "9bf0917b9f683240"
+            ]
+        ]
+    },
+    {
+        "id": "23295f7c8f98a29f",
+        "type": "debug",
+        "z": "522dde706ec49ac4",
+        "name": "influxdb-outputs-fan-backwall",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1160,
+        "y": 1720,
+        "wires": []
+    },
+    {
+        "id": "9bf0917b9f683240",
+        "type": "function",
+        "z": "522dde706ec49ac4",
+        "name": "change timestamp from ms to s",
+        "func": "msg.fields.time = Math.floor(msg.fields.time/1000);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 1680,
+        "wires": [
+            [
+                "23295f7c8f98a29f",
+                "fec1a0a894fa9b50"
+            ]
+        ]
+    },
+    {
+        "id": "88dd61c805d9b535",
+        "type": "mqtt in",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/control/co2",
+        "topic": "/devices/plantalytix/control/co2",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "03a139de35aa031b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 1860,
+        "wires": [
+            [
+                "824beb59b136d265"
+            ]
+        ]
+    },
+    {
+        "id": "824beb59b136d265",
+        "type": "change",
+        "z": "522dde706ec49ac4",
+        "name": "set fields and tags for influxdb",
+        "rules": [
+            {
+                "t": "set",
+                "p": "fields.time",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            },
+            {
+                "t": "set",
+                "p": "fields.co2",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "tags.unit",
+                "pt": "msg",
+                "to": "ms",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$append(fields,tags)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 570,
+        "y": 1860,
+        "wires": [
+            [
+                "a33f6aac90f6e9a2"
+            ]
+        ]
+    },
+    {
+        "id": "3a71e3e775a5e583",
+        "type": "debug",
+        "z": "522dde706ec49ac4",
+        "name": "influxdb-controls-co2",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1140,
+        "y": 1900,
+        "wires": []
+    },
+    {
+        "id": "a33f6aac90f6e9a2",
+        "type": "function",
+        "z": "522dde706ec49ac4",
+        "name": "change timestamp from ms to s",
+        "func": "msg.fields.time = Math.floor(msg.fields.time/1000);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 1860,
+        "wires": [
+            [
+                "3a71e3e775a5e583",
+                "8b8e57bd6cc9f8fa"
+            ]
+        ]
+    },
+    {
+        "id": "f15a16263e1ba844",
+        "type": "mqtt in",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/control/dehumidifier",
+        "topic": "/devices/plantalytix/control/dehumidifier",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "03a139de35aa031b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 190,
+        "y": 1960,
+        "wires": [
+            [
+                "bf16869774915412"
+            ]
+        ]
+    },
+    {
+        "id": "bf16869774915412",
+        "type": "change",
+        "z": "522dde706ec49ac4",
+        "name": "set fields and tags for influxdb",
+        "rules": [
+            {
+                "t": "set",
+                "p": "fields.time",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            },
+            {
+                "t": "set",
+                "p": "fields.dehumidifier",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$append(fields,tags)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 570,
+        "y": 1960,
+        "wires": [
+            [
+                "fa1bebac34faa827"
+            ]
+        ]
+    },
+    {
+        "id": "4efb17ed4743a56f",
+        "type": "debug",
+        "z": "522dde706ec49ac4",
+        "name": "influxdb-controls-dehumidifier",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1160,
+        "y": 2000,
+        "wires": []
+    },
+    {
+        "id": "fa1bebac34faa827",
+        "type": "function",
+        "z": "522dde706ec49ac4",
+        "name": "change timestamp from ms to s",
+        "func": "msg.fields.time = Math.floor(msg.fields.time/1000);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 1960,
+        "wires": [
+            [
+                "4efb17ed4743a56f",
+                "6445a59c1bc012db"
+            ]
+        ]
+    },
+    {
+        "id": "c8c84ee2b887e713",
+        "type": "mqtt in",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/control/heater",
+        "topic": "/devices/plantalytix/control/heater",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "03a139de35aa031b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 2060,
+        "wires": [
+            [
+                "7f8192f4e0234db6"
+            ]
+        ]
+    },
+    {
+        "id": "7f8192f4e0234db6",
+        "type": "change",
+        "z": "522dde706ec49ac4",
+        "name": "set fields and tags for influxdb",
+        "rules": [
+            {
+                "t": "set",
+                "p": "fields.time",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            },
+            {
+                "t": "set",
+                "p": "fields.heater",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$append(fields,tags)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 570,
+        "y": 2060,
+        "wires": [
+            [
+                "12ead9dcf73b9683"
+            ]
+        ]
+    },
+    {
+        "id": "6253a92cacc1bafe",
+        "type": "debug",
+        "z": "522dde706ec49ac4",
+        "name": "influxdb-controls-heater",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1150,
+        "y": 2100,
+        "wires": []
+    },
+    {
+        "id": "12ead9dcf73b9683",
+        "type": "function",
+        "z": "522dde706ec49ac4",
+        "name": "change timestamp from ms to s",
+        "func": "msg.fields.time = Math.floor(msg.fields.time/1000);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 2060,
+        "wires": [
+            [
+                "6253a92cacc1bafe",
+                "650564340e94427e"
+            ]
+        ]
+    },
+    {
+        "id": "647eec1a56ddfd8a",
+        "type": "mqtt in",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/control/light",
+        "topic": "/devices/plantalytix/control/light",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "03a139de35aa031b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 2160,
+        "wires": [
+            [
+                "a8bf2bdad81c272b"
+            ]
+        ]
+    },
+    {
+        "id": "a8bf2bdad81c272b",
+        "type": "change",
+        "z": "522dde706ec49ac4",
+        "name": "set fields and tags for influxdb",
+        "rules": [
+            {
+                "t": "set",
+                "p": "fields.time",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            },
+            {
+                "t": "set",
+                "p": "fields.light",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$append(fields,tags)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 570,
+        "y": 2160,
+        "wires": [
+            [
+                "017bcb27271c0709"
+            ]
+        ]
+    },
+    {
+        "id": "7bf236a90b526a0f",
+        "type": "debug",
+        "z": "522dde706ec49ac4",
+        "name": "influxdb-controls-light",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1140,
+        "y": 2200,
+        "wires": []
+    },
+    {
+        "id": "017bcb27271c0709",
+        "type": "function",
+        "z": "522dde706ec49ac4",
+        "name": "change timestamp from ms to s",
+        "func": "msg.fields.time = Math.floor(msg.fields.time/1000);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 2160,
+        "wires": [
+            [
+                "7bf236a90b526a0f",
+                "bfcc6ab85c7f1453"
+            ]
+        ]
+    },
+    {
+        "id": "d018b2e16138c03a",
+        "type": "mqtt in",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/control/fan-internal",
+        "topic": "/devices/plantalytix/control/fan-internal",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "03a139de35aa031b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 190,
+        "y": 2260,
+        "wires": [
+            [
+                "d1107ebe8a99a51c"
+            ]
+        ]
+    },
+    {
+        "id": "d1107ebe8a99a51c",
+        "type": "change",
+        "z": "522dde706ec49ac4",
+        "name": "set fields and tags for influxdb",
+        "rules": [
+            {
+                "t": "set",
+                "p": "fields.time",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            },
+            {
+                "t": "set",
+                "p": "fields.fan-internal",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$append(fields,tags)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 570,
+        "y": 2260,
+        "wires": [
+            [
+                "ffde742fbb5d0313"
+            ]
+        ]
+    },
+    {
+        "id": "8ca869824fd42dfa",
+        "type": "debug",
+        "z": "522dde706ec49ac4",
+        "name": "influxdb-controls-fan-internal",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1160,
+        "y": 2300,
+        "wires": []
+    },
+    {
+        "id": "ffde742fbb5d0313",
+        "type": "function",
+        "z": "522dde706ec49ac4",
+        "name": "change timestamp from ms to s",
+        "func": "msg.fields.time = Math.floor(msg.fields.time/1000);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 2260,
+        "wires": [
+            [
+                "8ca869824fd42dfa",
+                "dd431ed8ba9e755b"
+            ]
+        ]
+    },
+    {
+        "id": "e03fc22d8f0e6a55",
+        "type": "mqtt in",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/control/fan-external",
+        "topic": "/devices/plantalytix/control/fan-external",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "03a139de35aa031b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 190,
+        "y": 2360,
+        "wires": [
+            [
+                "ac82fcedd91ee0fb"
+            ]
+        ]
+    },
+    {
+        "id": "ac82fcedd91ee0fb",
+        "type": "change",
+        "z": "522dde706ec49ac4",
+        "name": "set fields and tags for influxdb",
+        "rules": [
+            {
+                "t": "set",
+                "p": "fields.time",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            },
+            {
+                "t": "set",
+                "p": "fields.fan-external",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$append(fields,tags)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 570,
+        "y": 2360,
+        "wires": [
+            [
+                "3bd93a34055774b6"
+            ]
+        ]
+    },
+    {
+        "id": "d4a2d60e0f09a7eb",
+        "type": "debug",
+        "z": "522dde706ec49ac4",
+        "name": "influxdb-controls-fan-external",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1160,
+        "y": 2400,
+        "wires": []
+    },
+    {
+        "id": "3bd93a34055774b6",
+        "type": "function",
+        "z": "522dde706ec49ac4",
+        "name": "change timestamp from ms to s",
+        "func": "msg.fields.time = Math.floor(msg.fields.time/1000);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 2360,
+        "wires": [
+            [
+                "d4a2d60e0f09a7eb",
+                "c9b1fd1bcb4431a8"
+            ]
+        ]
+    },
+    {
+        "id": "44c3b6b4198d6c19",
+        "type": "mqtt in",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/control/fan-backwall",
+        "topic": "/devices/plantalytix/control/fan-backwall",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "03a139de35aa031b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 190,
+        "y": 2460,
+        "wires": [
+            [
+                "70bdf126c3c449dc"
+            ]
+        ]
+    },
+    {
+        "id": "70bdf126c3c449dc",
+        "type": "change",
+        "z": "522dde706ec49ac4",
+        "name": "set fields and tags for influxdb",
+        "rules": [
+            {
+                "t": "set",
+                "p": "fields.time",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            },
+            {
+                "t": "set",
+                "p": "fields.fan-backwall",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$append(fields,tags)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 570,
+        "y": 2460,
+        "wires": [
+            [
+                "519e3ea24cdb90f0"
+            ]
+        ]
+    },
+    {
+        "id": "64ea8a45a41f979e",
+        "type": "debug",
+        "z": "522dde706ec49ac4",
+        "name": "influxdb-controls-fan-backwall",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1170,
+        "y": 2500,
+        "wires": []
+    },
+    {
+        "id": "519e3ea24cdb90f0",
+        "type": "function",
+        "z": "522dde706ec49ac4",
+        "name": "change timestamp from ms to s",
+        "func": "msg.fields.time = Math.floor(msg.fields.time/1000);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 2460,
+        "wires": [
+            [
+                "64ea8a45a41f979e",
+                "d0c8a6aafd82bc9c"
+            ]
+        ]
+    },
+    {
+        "id": "b406df566e9eb64c",
+        "type": "mqtt out",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/control/heater",
+        "topic": "/devices/plantalytix/control/heater",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "03a139de35aa031b",
+        "x": 1100,
+        "y": 2700,
+        "wires": []
+    },
+    {
+        "id": "2cf0300af95c5486",
+        "type": "debug",
+        "z": "522dde706ec49ac4",
+        "name": "PID-Ausgang",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 770,
+        "y": 2600,
+        "wires": []
+    },
+    {
+        "id": "952e095874fb4bce",
+        "type": "range",
+        "z": "522dde706ec49ac4",
+        "minin": "0",
+        "maxin": "1",
+        "minout": "0",
+        "maxout": "1",
+        "action": "clamp",
+        "round": false,
+        "property": "payload",
+        "name": "",
+        "x": 810,
+        "y": 2700,
+        "wires": [
+            [
+                "9116efc52779aa62",
+                "b406df566e9eb64c"
+            ]
+        ]
+    },
+    {
+        "id": "9116efc52779aa62",
+        "type": "debug",
+        "z": "522dde706ec49ac4",
+        "name": "PID-Ausgang [0,1]",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1010,
+        "y": 2640,
+        "wires": []
+    },
+    {
+        "id": "c7153ba3806d42a9",
+        "type": "mqtt in",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/status/sensors/temperature",
+        "topic": "/devices/plantalytix/status/sensors/temperature",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "03a139de35aa031b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 220,
+        "y": 2700,
+        "wires": [
+            [
+                "62e41a8f3ef9aa8a"
+            ]
+        ]
+    },
+    {
+        "id": "62a1f6b0bd47f883",
+        "type": "mqtt out",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/control/dehumidifier",
+        "topic": "/devices/plantalytix/control/dehumidifier",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "03a139de35aa031b",
+        "x": 1120,
+        "y": 2800,
+        "wires": []
+    },
+    {
+        "id": "ca923c9e7ed04fac",
+        "type": "debug",
+        "z": "522dde706ec49ac4",
+        "name": "HYST-Ausgang",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 2740,
+        "wires": []
+    },
+    {
+        "id": "90e6cbcae554aeba",
+        "type": "mqtt in",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/status/sensors/humidity",
+        "topic": "/devices/plantalytix/status/sensors/humidity",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "03a139de35aa031b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 200,
+        "y": 2800,
+        "wires": [
+            [
+                "4a7efa6bf9a4a78b"
+            ]
+        ]
+    },
+    {
+        "id": "8f7e1746f3d4dfde",
+        "type": "function",
+        "z": "522dde706ec49ac4",
+        "name": "3-Minute blocker",
+        "func": "\nif (msg.payload == 0 && context.get(\"state\") == 1) {\n    context.set(\"timestamp\", new Date().getTime())\n}\nif(msg.payload == 1) {\n    if ((new Date().getTime() - context.get(\"timestamp\")) > 180000) {\n        context.set(\"state\", 1)\n        return msg       \n    }\n}\nelse {\n    context.set(\"state\", 0)\n    return msg\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\ncontext.set(\"timestamp\", 0)\ncontext.set(\"state\", 0)",
+        "finalize": "",
+        "libs": [],
+        "x": 780,
+        "y": 2800,
+        "wires": [
+            [
+                "62a1f6b0bd47f883",
+                "b7864365f64fac6c"
+            ]
+        ]
+    },
+    {
+        "id": "b7864365f64fac6c",
+        "type": "mqtt out",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/control/fan-backwall",
+        "topic": "/devices/plantalytix/control/fan-backwall",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "03a139de35aa031b",
+        "x": 1120,
+        "y": 2860,
+        "wires": []
+    },
+    {
+        "id": "b7d4690353835825",
+        "type": "range",
+        "z": "522dde706ec49ac4",
+        "minin": "${LIGHT_RANGETEMPERATURE_LOW}",
+        "maxin": "${LIGHT_RANGETEMPERATURE_HIGH}",
+        "minout": "${LIGHT_SETPOINT}",
+        "maxout": "0",
+        "action": "clamp",
+        "round": false,
+        "property": "payload",
+        "name": "light range",
+        "x": 590,
+        "y": 3000,
+        "wires": [
+            [
+                "d8c51fdb19e91f16",
+                "fcef438799fbb076"
+            ]
+        ]
+    },
+    {
+        "id": "452cbfac4fef2f45",
+        "type": "mqtt in",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/status/sensors/temperature",
+        "topic": "/devices/plantalytix/status/sensors/temperature",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "03a139de35aa031b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 220,
+        "y": 3000,
+        "wires": [
+            [
+                "b7d4690353835825"
+            ]
+        ]
+    },
+    {
+        "id": "d8c51fdb19e91f16",
+        "type": "debug",
+        "z": "522dde706ec49ac4",
+        "name": "LIGHT-RANGE-Ausgang",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 970,
+        "y": 3060,
+        "wires": []
+    },
+    {
+        "id": "cf4a973d47022071",
+        "type": "mqtt out",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/control/light",
+        "topic": "/devices/plantalytix/control/light",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "03a139de35aa031b",
+        "x": 1090,
+        "y": 3000,
+        "wires": []
+    },
+    {
+        "id": "22bb3483f9f98ecd",
+        "type": "function",
+        "z": "522dde706ec49ac4",
+        "name": "co2",
+        "func": "\nif (msg.payload < env.get(\"CO2_SETPOINT\") &&\n    new Date().getTime() - context.get(\"last_co2_inject\") > env.get(\"CO2_INJECT_DELAY\")) {\n    context.set(\"last_co2_inject\", new Date().getTime())\n    return { payload: env.get(\"CO2_INJECT_DURATION\") }\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\ncontext.set(\"last_co2_inject\", 0)",
+        "finalize": "",
+        "libs": [],
+        "x": 530,
+        "y": 3200,
+        "wires": [
+            [
+                "31d9fa89f610c163"
+            ]
+        ]
+    },
+    {
+        "id": "06bc1212694a528d",
+        "type": "mqtt in",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/status/sensors/co2",
+        "topic": "/devices/plantalytix/status/sensors/co2",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "03a139de35aa031b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 190,
+        "y": 3200,
+        "wires": [
+            [
+                "22bb3483f9f98ecd"
+            ]
+        ]
+    },
+    {
+        "id": "31d9fa89f610c163",
+        "type": "mqtt out",
+        "z": "522dde706ec49ac4",
+        "name": "/devices/plantalytix/control/co2",
+        "topic": "/devices/plantalytix/control/co2",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "03a139de35aa031b",
+        "x": 930,
+        "y": 3200,
+        "wires": []
+    },
+    {
+        "id": "fcef438799fbb076",
+        "type": "function",
+        "z": "522dde706ec49ac4",
+        "name": "time window",
+        "func": "let startdate = new Date(\"1970-01-01T\" + env.get(\"LIGHT_SUNRISE\") + \":00\")\nlet enddate = new Date(\"1970-01-01T\" + env.get(\"LIGHT_SUNSET\") + \":00\")\n\nlet starttimestamp = startdate.getHours() * 60 + startdate.getMinutes()\nlet endtimestamp = enddate.getHours() * 60 + enddate.getMinutes()\nlet nowtimestamp = new Date().getHours() * 60 + new Date().getMinutes()\n\nif(starttimestamp < endtimestamp) {\n    if (nowtimestamp > starttimestamp && nowtimestamp < endtimestamp) {\n        return msg\n    }\n    else {\n        return {payload: 0}\n    }\n}\nelse {\n    if (nowtimestamp < starttimestamp && nowtimestamp > endtimestamp) {\n        return msg\n    }\n    else {\n        return {payload: 0}\n    }\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 3000,
+        "wires": [
+            [
+                "cf4a973d47022071"
+            ]
+        ]
+    },
+    {
+        "id": "3f4e959e8754022f",
+        "type": "influxdb out",
+        "z": "522dde706ec49ac4",
+        "influxdb": "bfe812c1e1a633a9",
+        "name": "influxdb-measurement \"sensors\"",
+        "measurement": "sensors",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "my_org",
+        "bucket": "my_bucket",
+        "x": 1170,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "89652473561f3926",
+        "type": "influxdb out",
+        "z": "522dde706ec49ac4",
+        "influxdb": "bfe812c1e1a633a9",
+        "name": "influxdb-measurement \"sensors\"",
+        "measurement": "sensors",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "my_org",
+        "bucket": "my_bucket",
+        "x": 1170,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "3e815b8897d5cba9",
+        "type": "influxdb out",
+        "z": "522dde706ec49ac4",
+        "influxdb": "bfe812c1e1a633a9",
+        "name": "influxdb-measurement \"sensors\"",
+        "measurement": "sensors",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "my_org",
+        "bucket": "my_bucket",
+        "x": 1170,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "6d0fa635933ad84a",
+        "type": "influxdb out",
+        "z": "522dde706ec49ac4",
+        "influxdb": "bfe812c1e1a633a9",
+        "name": "influxdb-measurement \"outputs\"",
+        "measurement": "outputs",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "my_org",
+        "bucket": "my_bucket",
+        "x": 1170,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "4325c7a2907f29c5",
+        "type": "influxdb out",
+        "z": "522dde706ec49ac4",
+        "influxdb": "bfe812c1e1a633a9",
+        "name": "influxdb-measurement \"outputs\"",
+        "measurement": "outputs",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "my_org",
+        "bucket": "my_bucket",
+        "x": 1170,
+        "y": 1180,
+        "wires": []
+    },
+    {
+        "id": "047440e8975c082a",
+        "type": "influxdb out",
+        "z": "522dde706ec49ac4",
+        "influxdb": "bfe812c1e1a633a9",
+        "name": "influxdb-measurement \"outputs\"",
+        "measurement": "outputs",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "my_org",
+        "bucket": "my_bucket",
+        "x": 1170,
+        "y": 1280,
+        "wires": []
+    },
+    {
+        "id": "a72fc3c4c04b3975",
+        "type": "influxdb out",
+        "z": "522dde706ec49ac4",
+        "influxdb": "bfe812c1e1a633a9",
+        "name": "influxdb-measurement \"outputs\"",
+        "measurement": "outputs",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "my_org",
+        "bucket": "my_bucket",
+        "x": 1170,
+        "y": 1380,
+        "wires": []
+    },
+    {
+        "id": "51dee6d7d63f476b",
+        "type": "influxdb out",
+        "z": "522dde706ec49ac4",
+        "influxdb": "bfe812c1e1a633a9",
+        "name": "influxdb-measurement \"outputs\"",
+        "measurement": "outputs",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "my_org",
+        "bucket": "my_bucket",
+        "x": 1170,
+        "y": 1480,
+        "wires": []
+    },
+    {
+        "id": "5ccef4b430587ef9",
+        "type": "influxdb out",
+        "z": "522dde706ec49ac4",
+        "influxdb": "bfe812c1e1a633a9",
+        "name": "influxdb-measurement \"outputs\"",
+        "measurement": "outputs",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "my_org",
+        "bucket": "my_bucket",
+        "x": 1170,
+        "y": 1580,
+        "wires": []
+    },
+    {
+        "id": "fec1a0a894fa9b50",
+        "type": "influxdb out",
+        "z": "522dde706ec49ac4",
+        "influxdb": "bfe812c1e1a633a9",
+        "name": "influxdb-measurement \"outputs\"",
+        "measurement": "outputs",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "my_org",
+        "bucket": "my_bucket",
+        "x": 1170,
+        "y": 1680,
+        "wires": []
+    },
+    {
+        "id": "8b8e57bd6cc9f8fa",
+        "type": "influxdb out",
+        "z": "522dde706ec49ac4",
+        "influxdb": "bfe812c1e1a633a9",
+        "name": "influxdb-measurement \"controls\"",
+        "measurement": "controls",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "my_org",
+        "bucket": "my_bucket",
+        "x": 1170,
+        "y": 1860,
+        "wires": []
+    },
+    {
+        "id": "6445a59c1bc012db",
+        "type": "influxdb out",
+        "z": "522dde706ec49ac4",
+        "influxdb": "bfe812c1e1a633a9",
+        "name": "influxdb-measurement \"controls\"",
+        "measurement": "controls",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "my_org",
+        "bucket": "my_bucket",
+        "x": 1170,
+        "y": 1960,
+        "wires": []
+    },
+    {
+        "id": "650564340e94427e",
+        "type": "influxdb out",
+        "z": "522dde706ec49ac4",
+        "influxdb": "bfe812c1e1a633a9",
+        "name": "influxdb-measurement \"controls\"",
+        "measurement": "controls",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "my_org",
+        "bucket": "my_bucket",
+        "x": 1170,
+        "y": 2060,
+        "wires": []
+    },
+    {
+        "id": "bfcc6ab85c7f1453",
+        "type": "influxdb out",
+        "z": "522dde706ec49ac4",
+        "influxdb": "bfe812c1e1a633a9",
+        "name": "influxdb-measurement \"controls\"",
+        "measurement": "controls",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "my_org",
+        "bucket": "my_bucket",
+        "x": 1170,
+        "y": 2160,
+        "wires": []
+    },
+    {
+        "id": "dd431ed8ba9e755b",
+        "type": "influxdb out",
+        "z": "522dde706ec49ac4",
+        "influxdb": "bfe812c1e1a633a9",
+        "name": "influxdb-measurement \"controls\"",
+        "measurement": "controls",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "my_org",
+        "bucket": "my_bucket",
+        "x": 1170,
+        "y": 2260,
+        "wires": []
+    },
+    {
+        "id": "c9b1fd1bcb4431a8",
+        "type": "influxdb out",
+        "z": "522dde706ec49ac4",
+        "influxdb": "bfe812c1e1a633a9",
+        "name": "influxdb-measurement \"controls\"",
+        "measurement": "controls",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "my_org",
+        "bucket": "my_bucket",
+        "x": 1170,
+        "y": 2360,
+        "wires": []
+    },
+    {
+        "id": "d0c8a6aafd82bc9c",
+        "type": "influxdb out",
+        "z": "522dde706ec49ac4",
+        "influxdb": "bfe812c1e1a633a9",
+        "name": "influxdb-measurement \"controls\"",
+        "measurement": "controls",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "my_org",
+        "bucket": "my_bucket",
+        "x": 1170,
+        "y": 2460,
+        "wires": []
+    },
+    {
+        "id": "62e41a8f3ef9aa8a",
+        "type": "PID control",
+        "z": "522dde706ec49ac4",
+        "name": "temperature: PID",
+        "target": "${TEMPERATURE_SETPOINT}",
+        "kp": "0.5",
+        "ki": "0.001",
+        "kd": "0",
+        "x": 530,
+        "y": 2700,
+        "wires": [
+            [
+                "2cf0300af95c5486",
+                "952e095874fb4bce"
+            ]
+        ]
+    },
+    {
+        "id": "4a7efa6bf9a4a78b",
+        "type": "hysteresis",
+        "z": "522dde706ec49ac4",
+        "name": "humidity: hysteresis",
+        "ThresholdType": "fixed",
+        "ThresholdRising": "${HUMIDITY_THRESHOLD_HIGH}",
+        "ThresholdFalling": "${HUMIDITY_THRESHOLD_LOW}",
+        "TopicThreshold": "",
+        "TopicCurrent": "",
+        "ThresholdDeltaRising": "",
+        "ThresholdDeltaFalling": "",
+        "InitialMessage": false,
+        "OutRisingType": "num",
+        "OutRisingValue": "1",
+        "OutFallingType": "num",
+        "OutFallingValue": "0",
+        "OutTopicType": "top",
+        "OutTopicValue": "",
+        "DynRaiseError": false,
+        "x": 530,
+        "y": 2800,
+        "wires": [
+            [
+                "ca923c9e7ed04fac",
+                "8f7e1746f3d4dfde"
+            ]
+        ]
+    }
+]

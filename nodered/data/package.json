@@ -1,0 +1,11 @@
+{
+    "name": "plantalytix",
+    "description": "basic control of a plantalytix device",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "node-red-contrib-hysteresis": "~0.3.0",
+        "node-red-contrib-influxdb": "~0.7.0",
+        "node-red-node-pidcontrol": "~0.0.4"
+    }
+}

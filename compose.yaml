@@ -1,0 +1,62 @@
+# compose.yaml
+services:
+
+    mosquitto:
+        image: eclipse-mosquitto:2.0
+        container_name: plantalytix-mosquitto
+        ports:
+            - 1883:1883
+            - 9001:9001
+        volumes:
+            - ./mosquitto/config:/mosquitto/config
+            - ./mosquitto/data:/mosquitto/data
+            - ./mosquitto/log:/mosquitto/log
+        restart: unless-stopped
+
+    influxdb:
+        image: influxdb:2.7
+        container_name: plantalytix-influxdb
+        depends_on:
+            - mosquitto
+        ports:
+            - 8086:8086
+        environment:
+            - DOCKER_INFLUXDB_INIT_MODE=setup
+            - DOCKER_INFLUXDB_INIT_USERNAME=my_influxdb_admin
+            - DOCKER_INFLUXDB_INIT_PASSWORD=my_influxdb_password
+            - DOCKER_INFLUXDB_INIT_ORG=my_org
+            - DOCKER_INFLUXDB_INIT_BUCKET=my_bucket
+            - DOCKER_INFLUXDB_INIT_RETENTION=0
+            - DOCKER_INFLUXDB_HTTP_AUTH_ENABLED=true
+            - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my_token
+        volumes:
+            - ./influxdb/data:/var/lib/influxdb2
+            - ./influxdb/config:/etc/influxdb2
+        restart: unless-stopped
+
+    nodered:
+        image: nodered/node-red:4.0
+        container_name: plantalytix-nodered
+        depends_on:
+            - mosquitto
+            - influxdb
+        ports:
+            - 1880:1880
+        volumes:
+            - ./nodered/data:/data
+        restart: unless-stopped
+
+    grafana:
+        image: grafana/grafana-enterprise:11.5.2
+        container_name: plantalytix-grafana
+        depends_on:
+            - influxdb
+        ports:
+            - 3000:3000
+        user: "0"
+        environment:
+            - GF_SECURITY_ADMIN_USER=my_grafana_admin
+            - GF_SECURITY_ADMIN_PASSWORD=my_grafana_password
+        volumes:
+            - ./grafana/data:/var/lib/grafana
+        restart: unless-stopped
